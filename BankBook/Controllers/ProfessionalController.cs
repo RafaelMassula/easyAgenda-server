@@ -1,5 +1,6 @@
 ﻿using EasyAgenda.Data.Contracts;
 using EasyAgenda.Exceptions;
+using EasyAgenda.Model;
 using EasyAgenda.Model.DTO;
 using EasyAgendaService.Exceptions;
 using Microsoft.AspNetCore.Mvc;
@@ -71,6 +72,7 @@ namespace EasyAgenda.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, error.Message);
             }
         }
+
         [Route("v1/professionals/{id}/schedules/cancelleds"), HttpGet]
         public async Task<IActionResult> GetCanceledAppointments(int id)
         {

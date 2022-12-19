@@ -1,6 +1,5 @@
 ﻿using EasyAgenda.Data.Contracts;
 using EasyAgenda.Exceptions;
-using EasyAgenda.Model;
 using EasyAgenda.Model.DTO;
 using EasyAgenda.Model.ViewModel;
 using EasyAgendaBase.Enums;
@@ -11,6 +10,7 @@ using Dapper;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using EasyAgenda.ExtensionMethods;
+using EasyAgenda.Model;
 
 namespace EasyAgenda.Data.DAL
 {
@@ -72,7 +72,6 @@ namespace EasyAgenda.Data.DAL
         {
             try
             {
-
                 await CheckSchedule(schedule);
 
                 string query = DmlService<ScheduleDTO>.GetQueryInsert(schedule, schedule.TableName());
@@ -136,26 +135,26 @@ namespace EasyAgenda.Data.DAL
 
         private async Task CheckSchedule(ScheduleDTO schedule)
         {
-            string query = @"SELECT 
-                                PROFESSIONALS.[ID] AS IDPROFESSIONAL,
-	                            SCHEDULES.CUSTOMERID AS IDCUSTOMER,
-                             	AGENDAS.[ID] AS IDAGENDA,
-                             	CONCAT(SCHEDULES.[AGENDAID],SCHEDULES.[CUSTOMERID],SCHEDULES.[PROFESSIONALID]) AS IDSCHEDULE,
-                             	SCHEDULESCANCELLED.[ID] AS IDSCHEDULECANCELLED
-                             FROM 
-                             	AGENDAS
-                             INNER JOIN PROFESSIONALS
-                             	ON AGENDAS.[PROFESSIONALID] = PROFESSIONALS.[ID]
-                             LEFT JOIN SCHEDULES
-                             	ON AGENDAS.[ID] = SCHEDULES.[AGENDAID] AND
-                             	PROFESSIONALS.[ID] = SCHEDULES.[PROFESSIONALID]
-                             LEFT JOIN SCHEDULESCANCELLED
-                             	ON SCHEDULES.CUSTOMERID = SCHEDULESCANCELLED.CUSTOMERID
-                                AND SCHEDULES.PROFESSIONALID = SCHEDULESCANCELLED.PROFESSIONALID
-                                AND SCHEDULES.AGENDAID = SCHEDULESCANCELLED.AGENDAID
+            string query = @"SELECT
+                                 PROFESSIONALS.[ID] AS IDPROFESSIONAL,
+                                 SCHEDULES.CUSTOMERID AS IDCUSTOMER,
+                                 AGENDAS.[ID] AS IDAGENDA,
+                                 CONCAT(SCHEDULES.[AGENDAID],SCHEDULES.[CUSTOMERID],SCHEDULES.[PROFESSIONALID]) AS IDSCHEDULE,
+                                 SCHEDULESCANCELLED.[ID] AS IDSCHEDULECANCELLED
+                             FROM
+                                 AGENDAS
+                                 INNER JOIN PROFESSIONALS
+                                 ON AGENDAS.[PROFESSIONALID] = PROFESSIONALS.[ID]
+                                 LEFT JOIN SCHEDULES
+                                 ON AGENDAS.[ID] = SCHEDULES.[AGENDAID] AND
+                                     PROFESSIONALS.[ID] = SCHEDULES.[PROFESSIONALID]
+                                 LEFT JOIN SCHEDULESCANCELLED
+                                 ON SCHEDULES.CUSTOMERID = SCHEDULESCANCELLED.CUSTOMERID
+                                     AND SCHEDULES.PROFESSIONALID = SCHEDULESCANCELLED.PROFESSIONALID
+                                     AND SCHEDULES.AGENDAID = SCHEDULESCANCELLED.AGENDAID
                              WHERE 
-                                PROFESSIONALS.[ID] = @ProfessionalId AND 
-                                AGENDAS.[ID] = @AgendaId";
+                                 PROFESSIONALS.[ID] = @ProfessionalId AND
+                                 AGENDAS.[ID] = @AgendaId";
             try
             {
                 using var conn = new DbSession(_connectionString);
@@ -217,7 +216,7 @@ namespace EasyAgenda.Data.DAL
                              INNER JOIN STATES
                              	ON ADDRESSES.[STATEID] = STATES.[ID]
                              WHERE AGENDAS.[ID] = @AgendaId AND PROFESSIONALS.[ID] = @ProfessionalId AND 
-                                   CUSTOMERS.[ID] = @CustomerId";
+                                CUSTOMERS.[ID] = @CustomerId";
             try
             {
                 using var conn = new DbSession(_connectionString);
@@ -233,6 +232,11 @@ namespace EasyAgenda.Data.DAL
             {
                 throw new Exception(error.Message);
             }
+        }
+
+        public Task ReserveSchedule(ScheduleReservedDTO scheduleReserverd)
+        {
+            throw new NotImplementedException();
         }
     }
 }

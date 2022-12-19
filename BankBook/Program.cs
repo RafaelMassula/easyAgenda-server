@@ -47,6 +47,15 @@ builder.Services.AddControllers(options =>
     }));
 }).AddNewtonsoftJson();
 
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddSingleton<IUriService>(service =>
+{
+    var acessor = service.GetRequiredService<IHttpContextAccessor>();
+    var request = acessor?.HttpContext?.Request;
+    var baseUri = string.Concat(request?.Scheme, "://", request?.Host.ToUriComponent());
+
+    return new UriService(baseUri);
+});
 builder.Services.AddTransient<IAddressDAL, AddressDAL>();
 builder.Services.AddTransient<IPeopleDAL, PeopleDAL>();
 builder.Services.AddTransient<IContactDAL, ContactDAL>();

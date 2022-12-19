@@ -1,8 +1,9 @@
-﻿namespace EasyAgenda.Model.DTO
+﻿using Newtonsoft.Json;
+
+namespace EasyAgenda.Model.DTO
 {
     public class CompanyAddressDTO
     {
-
         public CompanyDTO Company { get; set; }
         public AddressDTO Address { get; set; }
 

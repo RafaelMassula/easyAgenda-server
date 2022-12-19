@@ -46,7 +46,7 @@ namespace EasyAgenda.Data.DAL
         }
 
         public async Task<int> InsertReturn(PeopleDTO people)
-        {
+            {
             string query = DmlService<PeopleDTO>
                            .GetQueryInsertReturn(people, people.TableName());
             try

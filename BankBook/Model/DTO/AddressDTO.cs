@@ -1,6 +1,7 @@
 ﻿using EasyAgendaService;
+using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json.Serialization;
+
 
 namespace EasyAgenda.Model.DTO
 {
@@ -16,8 +17,21 @@ namespace EasyAgenda.Model.DTO
         public int CompanyId { get; set; }
         public int StateId { get; set; }
 
+        [JsonConstructor]
         public AddressDTO(string street, string neighborhood, string city, string zipCode,
-           string number, string complement, int stateId)
+           string number, string complement, int companyId, int stateId)
+        {
+            Street = street;
+            Neighborhood = neighborhood;
+            City = city;
+            ZipCode = AddressService.CheckedCep(zipCode);
+            Number = number;
+            Complement = complement;
+            CompanyId = companyId;
+            StateId = stateId;
+        }
+        public AddressDTO(string street, string neighborhood, string city, string zipCode,
+         string number, string complement, int stateId)
         {
             Street = street;
             Neighborhood = neighborhood;
@@ -26,13 +40,6 @@ namespace EasyAgenda.Model.DTO
             Number = number;
             Complement = complement;
             StateId = stateId;
-        }
-
-        public AddressDTO(string street, string neighborhood, string city, string zipCode,
-            string number, string complement, int companyId, int stateId) : this(street, neighborhood, city,
-                zipCode, number, complement, stateId)
-        {
-            CompanyId = companyId;
         }
     }
 }
