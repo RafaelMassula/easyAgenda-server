@@ -20,7 +20,7 @@ namespace EasyAgenda.Model.DTO
             Sex = sex;
             BirthDate = PeopleService.CheckedBirthDate(birthDate);
             Cpf = PeopleService.CheckedCpf(cpf);
-            Registered = registered;
+            Registered = DateTime.Now;
         }
     }
 }

@@ -232,7 +232,7 @@ namespace EasyAgenda.Data.DAL
                 agendas.CheckConflictingSchedules();
 
                 string query = DmlService<AgendaDTO>
-                    .GetQueryInsert(agendas.First(), agendas.TableName());
+                    .GetQueryInsert(agendas.First(), agendas.First().TableName());
 
                 using var connection = new DbSession(_connectionString).Connection;
 
