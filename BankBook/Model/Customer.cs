@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+using EasyAgendaBase.Model;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EasyAgenda.Model

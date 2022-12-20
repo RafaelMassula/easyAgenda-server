@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EasyAgenda.Model
 {
@@ -11,16 +11,13 @@ namespace EasyAgenda.Model
         public string Email { get; set; }
         [Column("Password")]
         public string Password { get; set; }
-        [Column("RoleId")]
-        public int RoleId { get; set; }
         public virtual Role Role { get; set; } = null!;
 
-        public User(int id, string email, string password, int roleId)
+        public User(int id, string email, string password)
         {
             Id = id;
             Email = email;
             Password = password;
-            RoleId = roleId;
         }
     }
 }
