@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\workSpace\\EasyAgenda\\EasyAgendaBase\\EasyAgendaBase.csproj": {}
+    "C:\\workSpace\\easyAgenda-server\\EasyAgendaBase\\EasyAgendaBase.csproj": {}
   },
   "projects": {
-    "C:\\workSpace\\EasyAgenda\\EasyAgendaBase\\EasyAgendaBase.csproj": {
+    "C:\\workSpace\\easyAgenda-server\\EasyAgendaBase\\EasyAgendaBase.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\workSpace\\EasyAgenda\\EasyAgendaBase\\EasyAgendaBase.csproj",
+        "projectUniqueName": "C:\\workSpace\\easyAgenda-server\\EasyAgendaBase\\EasyAgendaBase.csproj",
         "projectName": "EasyAgendaBase",
-        "projectPath": "C:\\workSpace\\EasyAgenda\\EasyAgendaBase\\EasyAgendaBase.csproj",
+        "projectPath": "C:\\workSpace\\easyAgenda-server\\EasyAgendaBase\\EasyAgendaBase.csproj",
         "packagesPath": "C:\\Users\\rafae\\.nuget\\packages\\",
-        "outputPath": "C:\\workSpace\\EasyAgenda\\EasyAgendaBase\\obj\\",
+        "outputPath": "C:\\workSpace\\easyAgenda-server\\EasyAgendaBase\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

@@ -8,4 +8,4 @@ build_property.PlatformNeutralAssembly =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = EasyAgendaService
-build_property.ProjectDir = C:\workSpace\EasyAgenda\EasyAgendaService\
+build_property.ProjectDir = C:\workSpace\easyAgenda-server\EasyAgendaService\
