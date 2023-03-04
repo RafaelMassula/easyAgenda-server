@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "cYm6IFq1wBh+x9AfSsjAYhrAedAqMYFtKIKqHLhF9REbx5EMor4EvdHnuT92lDSkCOJY1GY9Ar0U+H5OfQFqow==",
+  "dgSpecHash": "qINwwVg25XFWNuPXZQbrir+kqjn4l1pldbzd7cORsXOWmH4Z3gEIVLVF2RaYByraAWuJlq8RiJPOuivliVijTw==",
   "success": true,
-  "projectFilePath": "C:\\workSpace\\EasyAgenda\\EasyAgendaBase\\EasyAgendaBase.csproj",
+  "projectFilePath": "C:\\workSpace\\easyAgenda-server\\EasyAgendaBase\\EasyAgendaBase.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\rafae\\.nuget\\packages\\azure.core\\1.24.0\\azure.core.1.24.0.nupkg.sha512",
     "C:\\Users\\rafae\\.nuget\\packages\\azure.identity\\1.6.0\\azure.identity.1.6.0.nupkg.sha512",
