@@ -1,0 +1,15 @@
+C:\workSpace\EasyAgenda\EasyAgendaService\bin\Debug\net6.0\EasyAgendaService.deps.json
+C:\workSpace\EasyAgenda\EasyAgendaService\bin\Debug\net6.0\EasyAgendaService.dll
+C:\workSpace\EasyAgenda\EasyAgendaService\bin\Debug\net6.0\EasyAgendaService.pdb
+C:\workSpace\EasyAgenda\EasyAgendaService\bin\Debug\net6.0\EasyAgendaBase.dll
+C:\workSpace\EasyAgenda\EasyAgendaService\bin\Debug\net6.0\EasyAgendaBase.pdb
+C:\workSpace\EasyAgenda\EasyAgendaService\obj\Debug\net6.0\EasyAgendaService.csproj.AssemblyReference.cache
+C:\workSpace\EasyAgenda\EasyAgendaService\obj\Debug\net6.0\EasyAgendaService.GeneratedMSBuildEditorConfig.editorconfig
+C:\workSpace\EasyAgenda\EasyAgendaService\obj\Debug\net6.0\EasyAgendaService.AssemblyInfoInputs.cache
+C:\workSpace\EasyAgenda\EasyAgendaService\obj\Debug\net6.0\EasyAgendaService.AssemblyInfo.cs
+C:\workSpace\EasyAgenda\EasyAgendaService\obj\Debug\net6.0\EasyAgendaService.csproj.CoreCompileInputs.cache
+C:\workSpace\EasyAgenda\EasyAgendaService\obj\Debug\net6.0\EasyAgendaService.csproj.CopyComplete
+C:\workSpace\EasyAgenda\EasyAgendaService\obj\Debug\net6.0\EasyAgendaService.dll
+C:\workSpace\EasyAgenda\EasyAgendaService\obj\Debug\net6.0\refint\EasyAgendaService.dll
+C:\workSpace\EasyAgenda\EasyAgendaService\obj\Debug\net6.0\EasyAgendaService.pdb
+C:\workSpace\EasyAgenda\EasyAgendaService\obj\Debug\net6.0\ref\EasyAgendaService.dll
