@@ -1,9 +1,9 @@
-using EasyAgenda.Model.DTO;
+using EasyAgenda.Model;
 
 namespace EasyAgenda.Data.Contracts
 {
   public interface IAdminDAL
   {
-    Task Register(RecordDTO record);
+    Task Register(Admin admin);
   }
 }

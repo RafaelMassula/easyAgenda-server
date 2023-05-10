@@ -2,6 +2,7 @@ namespace EasyAgenda.Model.ViewModel
 {
   public class AddressViewModel
   {
+    public int Id { get; set; }
     public string Street { get; set; }
     public string Neighborhood { get; set; }
     public string City { get; set; }
@@ -10,9 +11,10 @@ namespace EasyAgenda.Model.ViewModel
     public string Complement { get; set; }
     public State State { get; set; }
 
-    public AddressViewModel(string street, string neighborhood, string city,
+    public AddressViewModel(int id, string street, string neighborhood, string city,
     string zipCode, string number, string complement, State state)
     {
+      Id = id;
       Street = street;
       Neighborhood = neighborhood;
       City = city;

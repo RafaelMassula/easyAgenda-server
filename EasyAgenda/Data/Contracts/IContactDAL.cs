@@ -1,8 +1,10 @@
-﻿using EasyAgenda.Model.DTO;
+using EasyAgenda.Model;
+using EasyAgenda.Model.DTO;
 
 namespace EasyAgenda.Data.Contracts
 {
-    public interface IContactDAL : IManipulation<ContactDTO>
-    {
-    }
+  public interface IContactDAL
+  {
+    Task Update (IList<Contact> contacts); 
+  }
 }

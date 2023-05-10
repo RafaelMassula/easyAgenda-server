@@ -1,3 +1,4 @@
+using Dapper;
 using EasyAgenda.Data.Contracts;
 using EasyAgenda.Exceptions;
 using EasyAgenda.ExtensionMethods;
@@ -5,8 +6,6 @@ using EasyAgenda.Model;
 using EasyAgenda.Model.DTO;
 using EasyAgenda.Model.ViewModel;
 using EasyAgendaService;
-using EasyAgendaService.Exceptions;
-using Dapper;
 using Microsoft.EntityFrameworkCore;
 using System.Data.SqlClient;
 
@@ -84,6 +83,9 @@ namespace EasyAgenda.Data.DAL
       {
         var professional = await _context.Professionals
             .Include(professional => professional.People)
+            .Include(professional => professional.People.ContactsPeople)
+            .ThenInclude(contacts => contacts.Contact)
+            .Include(professinal => professinal.Company)
             .ToListAsync();
 
         return professional;
@@ -214,23 +216,15 @@ namespace EasyAgenda.Data.DAL
       }
     }
 
-    public async Task Register(RecordProfessionalDTO record)
+    public async Task Register(Professional professional)
     {
+      var encryptPassword = new PasswordService(professional.User.Password);
+      professional.User.Password = encryptPassword.GetHashPassword();
       try
       {
-        int peopleId = await _peopleRepository.InsertReturn(record.People);
-        int userId = await _userRepository.InsertReturn(record.User);
-
-        record.Contact.PeopleId = peopleId;
-        await _contactRepository.Insert(record.Contact);
-
-        ProfessionalDTO professional = new(peopleId, userId, record.CompanyId);
-
-        string query = DmlService<ProfessionalDTO>
-                      .GetQueryInsert(professional, professional.TableName());
-
-        using var connection = new DbSession(_connectionString).Connection;
-        await connection.ExecuteAsync(query, professional);
+        _context.Add(professional);
+        await _context.SaveChangesAsync();
+        //Posteriormente enviar um email de boas vindas SendEmail(record, TypeMessage.NEW_USER);
       }
       catch (SqlException error)
       {

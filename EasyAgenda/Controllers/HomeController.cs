@@ -1,6 +1,5 @@
 using EasyAgenda.Data.Contracts;
 using EasyAgenda.Model;
-using EasyAgenda.Model.ViewModel;
 using EasyAgendaBase.Model;
 using EasyAgendaService;
 using EasyAgendaService.Data.Contracts;
@@ -36,8 +35,9 @@ namespace EasyAgenda.Controllers
 
         return Ok(new
         {
+          userView = new UserRole(user.Id, user.Email, user.Profile.Id, user.Profile.Description),
           token = _tokenService
-          .GenerateToken(new UserRole(user.Id, user.Email, user.Password, user.Role.Id, user.Role.Description))
+          .GenerateToken(new UserRole(user.Email, user.Profile.Description))
         });
 
       }

@@ -1,4 +1,6 @@
+using Dapper;
 using EasyAgenda.Data.Contracts;
+using EasyAgenda.ExtensionMethods;
 using EasyAgenda.Model;
 using EasyAgenda.Model.DTO;
 using EasyAgenda.Model.ViewModel;
@@ -6,11 +8,8 @@ using EasyAgendaBase.Enums;
 using EasyAgendaBase.Model;
 using EasyAgendaService;
 using EasyAgendaService.Contracts;
-using EasyAgendaService.Exceptions;
-using Dapper;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using EasyAgenda.ExtensionMethods;
 
 namespace EasyAgenda.Data.DAL
 {
@@ -231,7 +230,6 @@ namespace EasyAgenda.Data.DAL
       try
       {
         record.Contact.PeopleId = peopleId;
-        await _contactRepository.Insert(record.Contact);
 
         CustomerDTO customer = new(peopleId, userId);
 

@@ -8,7 +8,7 @@ namespace EasyAgendaService.Utilities.Helpers
       int totalRecord, IUriService uriService, string route)
     {
       //tratar succeso aqui!!!
-      PagedResponse<List<T>> response = new (pageData, validFilter.PageNumber, validFilter.PageSize);
+      PagedResponse<List<T>> response = new(pageData, validFilter.PageNumber, validFilter.PageSize);
       double totalPages = totalRecord / validFilter.PageSize;
       int roundedTotalPages = Convert.ToInt32(Math.Ceiling(totalPages));
 
@@ -23,7 +23,7 @@ namespace EasyAgendaService.Utilities.Helpers
         : null;
 
       response.FirstPage = uriService.GetPageUri(new PaginationFilter(1, validFilter.PageSize), route);
-      response.LastPage = uriService.GetPageUri(new PaginationFilter(roundedTotalPages,  validFilter.PageSize), route);
+      response.LastPage = uriService.GetPageUri(new PaginationFilter(roundedTotalPages, validFilter.PageSize), route);
       response.TotalPages = roundedTotalPages;
       response.TotalRecord = totalRecord;
 

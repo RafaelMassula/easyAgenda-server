@@ -1,16 +1,11 @@
-﻿using EasyAgendaService.Exceptions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using EasyAgendaBase.Exceptions;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace EasyAgendaService
 {
-    public abstract class AddressService
-    {
-        private readonly static List<string> _invalidNumbersOfCep = new()
+  public abstract class AddressService
+  {
+    private readonly static List<string> _invalidNumbersOfCep = new()
         {
                 "00000-00",
                 "11111-11",
@@ -23,14 +18,14 @@ namespace EasyAgendaService
                 "88888-88",
                 "99999-99"
         };
-        public static string CheckedCep(string cep)
-        {
-            if (_invalidNumbersOfCep.Contains(cep) || string.IsNullOrEmpty(cep))
-            {
-                throw new CpfException("Invalid cep.");
-            }
+    public static string CheckedCep(string cep)
+    {
+      if (_invalidNumbersOfCep.Contains(cep) || string.IsNullOrEmpty(cep))
+      {
+        throw new CpfException("Invalid cep.");
+      }
 
-            return Regex.Replace(cep, @"[A-Za-z-\W]+", "");
-        }
+      return Regex.Replace(cep, @"[A-Za-z-\W]+", "");
     }
+  }
 }

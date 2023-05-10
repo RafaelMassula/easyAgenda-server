@@ -1,34 +1,17 @@
-using EasyAgenda.ExtensionMethods;
 using EasyAgendaService;
-using System.ComponentModel.DataAnnotations.Schema;
+using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
 
 namespace EasyAgenda.Model.DTO
 {
-  [Table("[COMPANIES]")]
   public class CompanyDTO
   {
     public int Id { get; set; }
-    public string Description { get; set; }
-    public string Cnpj { get; set; }
-    public string Phone { get; set; }
-    public string Email { get; set; }
+    public required string Description { get; set; }
+    private string _cnpj = string.Empty;
+    public required string Cnpj { get => this._cnpj; set => _cnpj = CompanyService.CheckedCnpj(value); }
+    public required string Email { get; set; } = string.Empty;
     public int StatusId { get; set; }
 
-    public CompanyDTO(string description, string cnpj, string phone, string email, int statusId)
-    {
-      Description = description;
-      Cnpj = CompanyService.CheckedCnpj(cnpj);
-      Phone = phone.RemoveMaskPhone();
-      Email = email;
-      StatusId = statusId;
-    }
-    public CompanyDTO(int id, string description, string cnpj, string phone, string email)
-    {
-      Id = id;
-      Description = description;
-      Cnpj = CompanyService.CheckedCnpj(cnpj);
-      Phone = phone.RemoveMaskPhone();
-      Email = email;
-    }
   }
 }

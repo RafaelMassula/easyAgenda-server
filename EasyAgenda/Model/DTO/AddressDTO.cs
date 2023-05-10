@@ -8,7 +8,6 @@ namespace EasyAgenda.Model.DTO
   [Table("ADDRESSES")]
   public class AddressDTO
   {
-    public int Id { get; set; }
     public string Street { get; set; }
     public string Neighborhood { get; set; }
     public string City { get; set; }
@@ -41,17 +40,6 @@ namespace EasyAgenda.Model.DTO
       Number = number;
       Complement = complement;
       StateId = stateId;
-    }
-    public AddressDTO(int id, string street, string neighborhood, string city, string zipCode,
-     string number, string complement)
-    {
-      Id = id;
-      Street = street;
-      Neighborhood = neighborhood;
-      City = city;
-      ZipCode = AddressService.CheckedCep(zipCode);
-      Number = number;
-      Complement = complement;
     }
   }
 }

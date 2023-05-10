@@ -1,7 +1,7 @@
 using EasyAgenda.Data;
 using EasyAgenda.Model;
 using EasyAgenda.Model.DTO;
-using EasyAgenda.Model.ViewModel;
+using EasyAgendaBase.Exceptions;
 using EasyAgendaService;
 using EasyAgendaService.Contracts;
 using EasyAgendaService.Utilities;
@@ -53,13 +53,13 @@ namespace EasyAgenda.Controllers
       try
       {
         var route = Request.Path.Value;
-        var pageDataService = new PageDataService<CompanyViewModel>(filter.PageNumber, filter.PageSize);
+        var pageDataService = new PageDataService<Company>(filter.PageNumber, filter.PageSize);
 
         var compaies = await _company.GetAll();
         var pageData = pageDataService.GetDataPage(compaies).ToList();
         var totalRecords = pageData.Count;
         var pagedResponse = PaginationHelper.CreatePagedResponse(pageData, pageDataService.ValidFilter, totalRecords, _uriService, route);
-        
+
         return Ok(pagedResponse);
       }
       catch (Exception error)
@@ -69,8 +69,8 @@ namespace EasyAgenda.Controllers
     }
 
     [Route("v1/companies"), HttpPost]
-    [Authorize(Roles = "ADMIN")]
-    public async Task<IActionResult> Create(CompanyAddressDTO companyAddress)
+    [AllowAnonymous]
+    public async Task<IActionResult> Create([FromBody] Company companyAddress)
     {
       try
       {
@@ -89,14 +89,13 @@ namespace EasyAgenda.Controllers
 
     [Route("v1/companies"), HttpPut]
     [Authorize(Roles = "ADMIN")]
-    public async Task<IActionResult> Update(Company company)
+    public async Task<IActionResult> Update([FromBody]CompanyDTO company)
     {
       try
       {
         await _company.Update(company);
         return NoContent();
       }
-
       catch (Exception error)
       {
         return StatusCode(StatusCodes.Status500InternalServerError, error.Message);

@@ -1,6 +1,6 @@
 using EasyAgenda.Data.Contracts;
 using EasyAgenda.Model.DTO;
-using EasyAgendaService.Exceptions;
+using EasyAgendaBase.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

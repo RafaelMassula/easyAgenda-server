@@ -1,9 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace EasyAgendaService.Utilities
 {
   public class Wrappers<T>
@@ -20,7 +14,7 @@ namespace EasyAgendaService.Utilities
       Data = data;
       Succeded = true;
       Erros = Array.Empty<string>();
-      Message= string.Empty;
+      Message = string.Empty;
     }
 
   }

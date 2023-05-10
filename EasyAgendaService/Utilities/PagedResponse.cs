@@ -1,15 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace EasyAgendaService.Utilities
 {
-  public class PagedResponse<T>: Wrappers<T>
+  public class PagedResponse<T> : Wrappers<T>
   {
     public int PageNumber { get; set; }
-    public int PageSize { get; set; } 
+    public int PageSize { get; set; }
     public Uri FirstPage { get; set; } = null!;
     public Uri LastPage { get; set; } = null!;
     public int TotalPages { get; set; }
@@ -21,7 +15,7 @@ namespace EasyAgendaService.Utilities
     {
       Data = data;
       PageNumber = pageNumber;
-      PageSize= pageSize;
+      PageSize = pageSize;
       Message = string.Empty;
       Succeded = true;
       Erros = Array.Empty<string>();

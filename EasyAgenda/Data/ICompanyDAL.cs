@@ -1,14 +1,13 @@
 using EasyAgenda.Data.Contracts;
 using EasyAgenda.Model;
 using EasyAgenda.Model.DTO;
-using EasyAgenda.Model.ViewModel;
 
 namespace EasyAgenda.Data
 {
-  public interface ICompanyDAL : IQuery<CompanyViewModel>
+  public interface ICompanyDAL : IQuery<Company>
   {
-    public Task Insert(CompanyAddressDTO companyAddress);
-    public Task Update(Company company);
+    public Task Insert(Company companyAddress);
+    public Task Update(CompanyDTO company);
     public Task Delete(int id);
   }
 }

@@ -8,7 +8,7 @@ using System.Text;
 
 namespace EasyAgendaService
 {
-  public class TokenService: ITokenService
+  public class TokenService : ITokenService
   {
     private readonly string _privateKey;
     public TokenService(IConfiguration configuration)
@@ -24,7 +24,7 @@ namespace EasyAgendaService
         Subject = new ClaimsIdentity(new Claim[]
         {
           new Claim(ClaimTypes.Email, user.Email),
-          new Claim(ClaimTypes.Role, user.RoleDescription)
+          new Claim(ClaimTypes.Role, user.ProfileDescription)
         }),
         Expires = DateTime.UtcNow.AddHours(2),
         SigningCredentials = new SigningCredentials(

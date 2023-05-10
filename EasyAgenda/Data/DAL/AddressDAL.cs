@@ -1,50 +1,80 @@
 using EasyAgenda.Data.Contracts;
+using EasyAgenda.Model;
 using EasyAgenda.Model.DTO;
 using EasyAgenda.Model.JsonProfile;
-using EasyAgenda.Model;
-using Newtonsoft.Json;
-using System.Text.RegularExpressions;
-using System.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using System.Data.SqlClient;
+using System.Text.RegularExpressions;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace EasyAgenda.Data.DAL
 {
-  public class AddressDAL: IAddressDAL
+  public class AddressDAL : IAddressDAL
   {
-      private readonly HttpClient _client = new();
-      private readonly EasyAgendaContext _context;
+    private readonly HttpClient _client = new();
+    private readonly EasyAgendaContext _context;
 
-      public AddressDAL(EasyAgendaContext context)
+    public AddressDAL(EasyAgendaContext context)
+    {
+      _context = context;
+    }
+    public async Task<IEnumerable<State>> GetStates()
+    {
+      try
       {
-        _context = context;
+        return await _context.States
+           .OrderBy(state => state.Initials)
+           .ToListAsync();
       }
-      public async Task<AddressDTO> GetAddress(string cep)
+      catch (Exception error)
       {
-        cep = Regex.Replace(cep, @"\W", "").ToString();
-        try
-        {
-          using HttpResponseMessage response = await _client.GetAsync($"http://viacep.com.br/ws/{cep}/json/");
-          response.EnsureSuccessStatusCode();
+        throw new Exception(error.Message);
+      }
+    }
 
-          string responseBody = await response.Content.ReadAsStringAsync();
-          var json = JsonConvert.DeserializeObject<AddressJson>(responseBody);
-          if (json != null && !json.Erro)
-          {
-            var state = await _context.States.SingleAsync(state => state.Initials == json.Uf.ToUpper());
+    public async Task<AddressDTO> GetAddress(string cep)
+    {
+      cep = Regex.Replace(cep, @"\W", "").ToString();
+      try
+      {
+        using HttpResponseMessage response = await _client.GetAsync($"http://viacep.com.br/ws/{cep}/json/");
+        response.EnsureSuccessStatusCode();
 
-            return new AddressDTO(json.Logradouro, json.Bairro, json.Localidade,
-                json.Cep, "", "", state.Id);
-          }
-          throw new HttpRequestException("Invalid cep.");
-        }
-        catch (SqlException error)
+        string responseBody = await response.Content.ReadAsStringAsync();
+        var json = JsonConvert.DeserializeObject<AddressJson>(responseBody);
+        if (json != null && !json.Erro)
         {
-          throw new Exception(error.Message);
+          var state = await _context.States.SingleAsync(state => state.Initials == json.Uf.ToUpper());
+
+          return new AddressDTO(json.Logradouro, json.Bairro, json.Localidade,
+              json.Cep, "", "", state.Id);
         }
-        catch (HttpRequestException error)
-        {
-          throw new HttpRequestException(error.Message);
-        }
+        throw new HttpRequestException("Invalid cep.");
+      }
+      catch (SqlException error)
+      {
+        throw new Exception(error.Message);
+      }
+    }
+    public async Task Update(Address address)
+    {
+      try
+      {
+        var addressChange = new Address(address.Id, address.Street, address.Neighborhood,
+          address.City, address.ZipCode, address.Number, address.Complement, address.StateId, address.CompanyId);
+
+        _context.Update(addressChange);
+        await _context.SaveChangesAsync();
+      }
+      catch (SqlException error)
+      {
+        throw new Exception(error.Message);
+      }
+      catch (Exception error)
+      {
+        throw new Exception(error.Message);
       }
     }
   }
+}

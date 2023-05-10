@@ -39,7 +39,7 @@ namespace EasyAgendaService
 
       byte[] src = Convert.FromBase64String(hashedPassword);
 
-      if(src.Length != 36)
+      if (src.Length != 36)
         return false;
 
       byte[] dst = new byte[16];

@@ -11,6 +11,6 @@ namespace EasyAgenda.Data.Contracts
     Task<IEnumerable<ScheduleViewModel>> GetAppointments(int id);
     Task<IEnumerable<ScheduleCancelledViewModel>> GetCanceledAppointments(int id);
     Task OpenAgenda(IList<AgendaDTO> agenda);
-    Task Register(RecordProfessionalDTO record);
+    Task Register(Professional professional);
   }
 }

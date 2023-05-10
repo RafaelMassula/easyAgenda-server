@@ -1,12 +1,10 @@
+using Dapper;
 using EasyAgenda.Data.Contracts;
+using EasyAgenda.ExtensionMethods;
+using EasyAgenda.Model;
 using EasyAgenda.Model.DTO;
 using EasyAgendaService;
-using Dapper;
 using Microsoft.Data.SqlClient;
-using EasyAgenda.ExtensionMethods;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
-using EasyAgenda.Model;
-using Microsoft.AspNetCore.Mvc;
 
 namespace EasyAgenda.Data.DAL
 {
@@ -21,17 +19,17 @@ namespace EasyAgenda.Data.DAL
     {
       var query = @$"SELECT
                           [USERS].[ID], [USERS].[EMAIL], [USERS].[PASSWORD],
-                          [ROLES].[ID], [ROLES].[DESCRIPTION]
+                          [PROFILES].[ID], [PROFILES].[DESCRIPTION]
                        FROM
                           [USERS]
-                       INNER JOIN [ROLES] ON [USERS].[ROLEID] = [ROLES].[ID]
+                       INNER JOIN [PROFILES] ON [USERS].[PROFILEID] = [PROFILES].[ID]
                        WHERE
                           [EMAIL] = '{email}'";
 
       using var conn = new DbSession(_connectionString);
-      var users = await conn.Connection.QueryAsync<User, Role, User>(query, (user, role) =>
+      var users = await conn.Connection.QueryAsync<User, Profile, User>(query, (user, profile) =>
       {
-        user.Role = role;
+        user.Profile = profile;
         return user;
       });
 

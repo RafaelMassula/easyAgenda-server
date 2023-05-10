@@ -4,7 +4,7 @@ using EasyAgenda.Model.ViewModel;
 
 namespace EasyAgenda.Data.Contracts
 {
-  public interface ICustomerDAL: IQuery<Customer>
+  public interface ICustomerDAL : IQuery<Customer>
   {
     Task<PeopleViewModel> GetByUser(int id);
     Task<IEnumerable<ScheduleViewModel>> GetAppointmentsByDate(int id, DateTime date);

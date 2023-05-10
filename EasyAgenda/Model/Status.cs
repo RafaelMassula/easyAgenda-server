@@ -2,17 +2,17 @@
 
 namespace EasyAgenda.Model
 {
-    [Table("STATUS")]
-    public class Status
+  [Table("STATUS")]
+  public class Status
+  {
+    [Column("ID")]
+    public int Id { get; set; }
+    [Column("DESCRIPTION")]
+    public string Description { get; set; }
+    public Status(int id, string description)
     {
-        [Column("ID")]
-        public int Id { get; set; }
-        [Column("DESCRIPTION")]
-        public string Description { get; set; }
-        public Status(int id, string description)
-        {
-            Id = id;
-            Description = description;
-        }
+      Id = id;
+      Description = description;
     }
+  }
 }

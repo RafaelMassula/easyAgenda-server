@@ -1,13 +1,8 @@
 using EasyAgendaService.Utilities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EasyAgendaService
 {
-  public class PageDataService<T> where T: class
+  public class PageDataService<T> where T : class
   {
     public PaginationFilter ValidFilter { get; }
 

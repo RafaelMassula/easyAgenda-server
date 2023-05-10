@@ -1,33 +1,32 @@
-﻿using EasyAgenda.Data.Contracts;
+﻿using Dapper;
+using EasyAgenda.Data.Contracts;
 using EasyAgenda.Exceptions;
+using EasyAgenda.ExtensionMethods;
 using EasyAgenda.Model.DTO;
 using EasyAgenda.Model.ViewModel;
 using EasyAgendaBase.Enums;
 using EasyAgendaBase.Model;
 using EasyAgendaService;
 using EasyAgendaService.Contracts;
-using Dapper;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using EasyAgenda.ExtensionMethods;
-using EasyAgenda.Model;
 
 namespace EasyAgenda.Data.DAL
 {
-    public class ScheduleDAL : IScheduleDAL
+  public class ScheduleDAL : IScheduleDAL
+  {
+    private readonly string _connectionString;
+    private readonly IEmailService _emailService;
+    public ScheduleDAL(
+        IConfiguration configuration,
+        IEmailService emailService)
     {
-        private readonly string _connectionString;
-        private readonly IEmailService _emailService;
-        public ScheduleDAL(
-            IConfiguration configuration,
-            IEmailService emailService)
-        {
-            _connectionString = configuration.GetConnectionString("SqlServer");
-            _emailService = emailService;
-        }
-        public async Task<IEnumerable<ScheduleViewModel>> GetSchedulesOpen(int idProfessional)
-        {
-            string query = @"SELECT
+      _connectionString = configuration.GetConnectionString("SqlServer");
+      _emailService = emailService;
+    }
+    public async Task<IEnumerable<ScheduleViewModel>> GetSchedulesOpen(int idProfessional)
+    {
+      string query = @"SELECT
                                  CONCAT(PEOPLE.[NAME], ' ', [PEOPLE].[LASTNAME]) PROFESSIONAL,
                                  [AGENDAS].[SPECIALIZATION], [AGENDAS].[DESCRIPTION], [AGENDAS].[DATE], 
                                  [AGENDAS].[START], AGENDAS.[END], [AGENDAS].[ID] AS AGENDAID,
@@ -55,87 +54,87 @@ namespace EasyAgenda.Data.DAL
                                  WHERE 
                                      [SCHEDULERESERVED].[PROFESSIONALID] = [PROFESSIONALS].[ID] AND
                                      [SCHEDULERESERVED].[AGENDAID] = [AGENDAS].[ID]) ";
-            if (idProfessional > 0)
-                query += "AND [PROFESSIONALS].[ID] = @idProfessional";
+      if (idProfessional > 0)
+        query += "AND [PROFESSIONALS].[ID] = @idProfessional";
 
-            try
-            {
-                using var conn = new DbSession(_connectionString);
-                return await conn.Connection.QueryAsync<ScheduleViewModel>(query, new { idProfessional });
-            }
-            catch (SqlException error)
-            {
-                throw new Exception(error.Message);
-            }
-        }
-        public async Task RegisterAppointment(ScheduleDTO schedule)
-        {
-            try
-            {
-                await CheckSchedule(schedule);
+      try
+      {
+        using var conn = new DbSession(_connectionString);
+        return await conn.Connection.QueryAsync<ScheduleViewModel>(query, new { idProfessional });
+      }
+      catch (SqlException error)
+      {
+        throw new Exception(error.Message);
+      }
+    }
+    public async Task RegisterAppointment(ScheduleDTO schedule)
+    {
+      try
+      {
+        await CheckSchedule(schedule);
 
-                string query = DmlService<ScheduleDTO>.GetQueryInsert(schedule, schedule.TableName());
+        string query = DmlService<ScheduleDTO>.GetQueryInsert(schedule, schedule.TableName());
 
-                using var conn = new DbSession(_connectionString);
-                await conn.Connection.ExecuteAsync(query, schedule);
+        using var conn = new DbSession(_connectionString);
+        await conn.Connection.ExecuteAsync(query, schedule);
 
-                var schedulesData = await GetScheduleData(schedule);
+        var schedulesData = await GetScheduleData(schedule);
 
-                RecipientMessage recipientMessage = new(schedulesData.Client, schedulesData.EmailClient,
-                           schedulesData.Date, schedulesData.Start, schedulesData.Professional, schedulesData.EmailProfessional, schedulesData.Company,
-                           schedulesData.PhoneCompany, schedulesData.EmailCompany, schedulesData.Address);
-
-
-                await _emailService.Send(recipientMessage, TypeMessage.NEW_APPOINTMENT_CLIENT);
-                await _emailService.Send(recipientMessage, TypeMessage.NEW_APPOINTMENT_PROFESSIONAL);
-            }
-            catch (ScheduleException error)
-            {
-                throw new ScheduleException(error.Message);
-            }
-            catch (Exception error)
-            {
-                throw new Exception(error.Message);
-            }
-        }
-
-        public async Task CancelAppointment(ScheduleCancelledDTO scheduleCancelled)
-        {
-            var schedule = new ScheduleDTO(scheduleCancelled.CustomerId, scheduleCancelled.ProfessionalId,
-                scheduleCancelled.AgendaId);
-
-            try
-            {
-                var schedulesData = await GetScheduleData(schedule);
-
-                string query = DmlService<ScheduleCancelledDTO>.GetQueryInsert(scheduleCancelled, scheduleCancelled.TableName());
-
-                using var conn = new DbSession(_connectionString);
-                await conn.Connection.ExecuteAsync(query, scheduleCancelled);
+        RecipientMessage recipientMessage = new(schedulesData.Client, schedulesData.EmailClient,
+                   schedulesData.Date, schedulesData.Start, schedulesData.Professional, schedulesData.EmailProfessional, schedulesData.Company,
+                   schedulesData.PhoneCompany, schedulesData.EmailCompany, schedulesData.Address);
 
 
-                RecipientMessage recipientMessage = new(schedulesData.Client, schedulesData.EmailClient,
-                           schedulesData.Date, schedulesData.Start, schedulesData.Professional, schedulesData.EmailProfessional, schedulesData.Company,
-                           schedulesData.PhoneCompany, schedulesData.EmailCompany, schedulesData.Address);
+        await _emailService.Send(recipientMessage, TypeMessage.NEW_APPOINTMENT_CLIENT);
+        await _emailService.Send(recipientMessage, TypeMessage.NEW_APPOINTMENT_PROFESSIONAL);
+      }
+      catch (ScheduleException error)
+      {
+        throw new ScheduleException(error.Message);
+      }
+      catch (Exception error)
+      {
+        throw new Exception(error.Message);
+      }
+    }
+
+    public async Task CancelAppointment(ScheduleCancelledDTO scheduleCancelled)
+    {
+      var schedule = new ScheduleDTO(scheduleCancelled.CustomerId, scheduleCancelled.ProfessionalId,
+          scheduleCancelled.AgendaId);
+
+      try
+      {
+        var schedulesData = await GetScheduleData(schedule);
+
+        string query = DmlService<ScheduleCancelledDTO>.GetQueryInsert(scheduleCancelled, scheduleCancelled.TableName());
+
+        using var conn = new DbSession(_connectionString);
+        await conn.Connection.ExecuteAsync(query, scheduleCancelled);
 
 
-                await _emailService.Send(recipientMessage, TypeMessage.APPOINTMENT_CANCELLED_CLIENT);
-                await _emailService.Send(recipientMessage, TypeMessage.APPOINTMENT_CANCELLED_PROFESSIONAL);
+        RecipientMessage recipientMessage = new(schedulesData.Client, schedulesData.EmailClient,
+                   schedulesData.Date, schedulesData.Start, schedulesData.Professional, schedulesData.EmailProfessional, schedulesData.Company,
+                   schedulesData.PhoneCompany, schedulesData.EmailCompany, schedulesData.Address);
 
-            }
-            catch (ScheduleException error)
-            {
-                throw new ScheduleException(error.Message);
-            }
-            catch (Exception error)
-            {
-                throw new Exception(error.Message);
-            }
-        }
 
-        private async Task CheckSchedule(ScheduleDTO schedule)
-        {
-            string query = @"SELECT
+        await _emailService.Send(recipientMessage, TypeMessage.APPOINTMENT_CANCELLED_CLIENT);
+        await _emailService.Send(recipientMessage, TypeMessage.APPOINTMENT_CANCELLED_PROFESSIONAL);
+
+      }
+      catch (ScheduleException error)
+      {
+        throw new ScheduleException(error.Message);
+      }
+      catch (Exception error)
+      {
+        throw new Exception(error.Message);
+      }
+    }
+
+    private async Task CheckSchedule(ScheduleDTO schedule)
+    {
+      string query = @"SELECT
                                  PROFESSIONALS.[ID] AS IDPROFESSIONAL,
                                  SCHEDULES.CUSTOMERID AS IDCUSTOMER,
                                  AGENDAS.[ID] AS IDAGENDA,
@@ -155,31 +154,31 @@ namespace EasyAgenda.Data.DAL
                              WHERE 
                                  PROFESSIONALS.[ID] = @ProfessionalId AND
                                  AGENDAS.[ID] = @AgendaId";
-            try
-            {
-                using var conn = new DbSession(_connectionString);
-                var result = await conn.Connection.QueryFirstOrDefaultAsync<(int idProfessional, int idCustomer, int idAgenda, string idSchedule,
-                    int idScheduleCancelled)>(query, schedule);
+      try
+      {
+        using var conn = new DbSession(_connectionString);
+        var result = await conn.Connection.QueryFirstOrDefaultAsync<(int idProfessional, int idCustomer, int idAgenda, string idSchedule,
+            int idScheduleCancelled)>(query, schedule);
 
-                //verifica se o horário já está agendado para outro ou o mesmo cliente.
-                if (result.idAgenda > 0 && !string.IsNullOrEmpty(result.idSchedule) &&
-                    result.idScheduleCancelled == 0)
-                    throw new ScheduleException("Appointment already booked.");
+        //verifica se o horário já está agendado para outro ou o mesmo cliente.
+        if (result.idAgenda > 0 && !string.IsNullOrEmpty(result.idSchedule) &&
+            result.idScheduleCancelled == 0)
+          throw new ScheduleException("Appointment already booked.");
 
-                //verifica se o horário solicitado existe na agenda do profissional.
-                if (result.idAgenda == 0)
-                    throw new ScheduleException("Time not available.");
-            }
-            catch (SqlException error)
-            {
-                throw new Exception(error.Message);
-            }
+        //verifica se o horário solicitado existe na agenda do profissional.
+        if (result.idAgenda == 0)
+          throw new ScheduleException("Time not available.");
+      }
+      catch (SqlException error)
+      {
+        throw new Exception(error.Message);
+      }
 
-        }
+    }
 
-        private async Task<ScheduleViewModel> GetScheduleData(ScheduleDTO schedule)
-        {
-            string query = @"SELECT
+    private async Task<ScheduleViewModel> GetScheduleData(ScheduleDTO schedule)
+    {
+      string query = @"SELECT
                              	CONCAT(PEOPLECUSTOMER.[NAME], ' ', PEOPLECUSTOMER.[LASTNAME]) CLIENT,
                              	USERSCUSTOMER.[EMAIL] EMAILCLIENT, CONTACTSCUSTOMER.[PHONE] PHONECLIENT,
                              	CONCAT(PEOPLEPROFESSIONAL.[NAME], ' ', PEOPLEPROFESSIONAL.[LASTNAME]) PROFESSIONAL,
@@ -217,26 +216,26 @@ namespace EasyAgenda.Data.DAL
                              	ON ADDRESSES.[STATEID] = STATES.[ID]
                              WHERE AGENDAS.[ID] = @AgendaId AND PROFESSIONALS.[ID] = @ProfessionalId AND 
                                 CUSTOMERS.[ID] = @CustomerId";
-            try
-            {
-                using var conn = new DbSession(_connectionString);
-                var schedulesData = await conn.Connection.QueryFirstOrDefaultAsync<ScheduleViewModel>(query, schedule);
+      try
+      {
+        using var conn = new DbSession(_connectionString);
+        var schedulesData = await conn.Connection.QueryFirstOrDefaultAsync<ScheduleViewModel>(query, schedule);
 
-                if (schedulesData == null)
-                {
-                    throw new Exception("Appointment data not found");
-                }
-                return schedulesData;
-            }
-            catch (SqlException error)
-            {
-                throw new Exception(error.Message);
-            }
-        }
-
-        public Task ReserveSchedule(ScheduleReservedDTO scheduleReserverd)
+        if (schedulesData == null)
         {
-            throw new NotImplementedException();
+          throw new Exception("Appointment data not found");
         }
+        return schedulesData;
+      }
+      catch (SqlException error)
+      {
+        throw new Exception(error.Message);
+      }
     }
+
+    public Task ReserveSchedule(ScheduleReservedDTO scheduleReserverd)
+    {
+      throw new NotImplementedException();
+    }
+  }
 }

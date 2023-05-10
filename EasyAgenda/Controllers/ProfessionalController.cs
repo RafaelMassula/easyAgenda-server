@@ -1,7 +1,8 @@
 using EasyAgenda.Data.Contracts;
 using EasyAgenda.Exceptions;
+using EasyAgenda.Model;
 using EasyAgenda.Model.DTO;
-using EasyAgendaService.Exceptions;
+using EasyAgendaBase.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -107,14 +108,14 @@ namespace EasyAgenda.Controllers
       }
     }
 
-    [Route("v1/professionals/register"), HttpPost]
+    [Route("v1/professionals"), HttpPost]
     [Authorize(Roles = "ADMIN")]
-    public async Task<IActionResult> Register(RecordProfessionalDTO record)
+    public async Task<IActionResult> Register(Professional professional)
     {
       try
       {
-        await _professionalRepository.Register(record);
-        return Created("", record);
+        await _professionalRepository.Register(professional);
+        return Created("", professional);
       }
       catch (CpfException error)
       {

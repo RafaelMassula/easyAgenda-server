@@ -1,13 +1,13 @@
 using EasyAgenda.Data.Contracts;
-using EasyAgenda.Model.DTO;
-using EasyAgendaService.Exceptions;
+using EasyAgenda.Model;
+using EasyAgendaBase.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EasyAgenda.Controllers
 {
   [ApiController]
   [Route("api/")]
-  public class AdminController: ControllerBase
+  public class AdminController : ControllerBase
   {
     private readonly IAdminDAL _adminRepository;
 
@@ -17,12 +17,12 @@ namespace EasyAgenda.Controllers
     }
 
     [Route("v1/administrators"), HttpPost]
-    public async Task<IActionResult> Register(RecordDTO record)
+    public async Task<IActionResult> Register(Admin admin)
     {
       try
       {
-        await _adminRepository.Register(record);
-        return Created("", record);
+        await _adminRepository.Register(admin);
+        return Created("", admin);
       }
       catch (CpfException error)
       {

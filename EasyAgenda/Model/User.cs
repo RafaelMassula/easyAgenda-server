@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace EasyAgenda.Model
 {
@@ -11,7 +12,9 @@ namespace EasyAgenda.Model
     public string Email { get; set; }
     [Column("Password")]
     public string Password { get; set; }
-    public virtual Role Role { get; set; } = null!;
+    public int ProfileId { get; set; }
+    [JsonIgnore]
+    public virtual Profile? Profile { get; set; } = null!;
 
     public User(int id, string email, string password)
     {

@@ -1,12 +1,12 @@
+using Dapper;
 using EasyAgenda.Data.Contracts;
+using EasyAgenda.ExtensionMethods;
 using EasyAgenda.Model;
 using EasyAgenda.Model.DTO;
 using EasyAgendaService;
-using EasyAgendaService.Exceptions;
-using Dapper;
+using EasyAgendaBase.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using System.Data.SqlClient;
-using EasyAgenda.ExtensionMethods;
 
 namespace EasyAgenda.Data.DAL
 {

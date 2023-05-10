@@ -1,4 +1,3 @@
-using EasyAgenda.Data.Contracts;
 using EasyAgenda.Model.ViewModel;
 
 namespace EasyAgenda.Data.DAL

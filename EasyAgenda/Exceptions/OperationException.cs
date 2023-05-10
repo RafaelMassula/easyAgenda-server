@@ -1,12 +1,12 @@
 ﻿namespace EasyAgenda.Exceptions
 {
-    public class OperationException : Exception
+  public class OperationException : Exception
+  {
+    public OperationException()
     {
-        public OperationException()
-        {
-        }
-        public OperationException(string message) : base(message)
-        {
-        }
     }
+    public OperationException(string message) : base(message)
+    {
+    }
+  }
 }
